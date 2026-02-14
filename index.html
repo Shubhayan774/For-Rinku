@@ -8,22 +8,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;scroll-behavior:smooth;}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  scroll-behavior:smooth;
+}
 
 body{
   font-family:'Poppins',sans-serif;
   background:radial-gradient(circle at top,#141428,#000);
   color:white;
   overflow-x:hidden;
-  animation:bgGlow 6s infinite alternate;
 }
 
-@keyframes bgGlow{
-  from{background:radial-gradient(circle at top,#141428,#000);}
-  to{background:radial-gradient(circle at top,#1f1f3a,#000);}
-}
-
-/* Stars */
+/* Star background */
 .stars{
   position:fixed;
   width:200%;
@@ -70,6 +69,7 @@ body{
   0%,100%{transform:translateY(0);}
   50%{transform:translateY(-10px);}
 }
+
 .envelope:before{
   content:"";
   position:absolute;
@@ -80,7 +80,9 @@ body{
   transform-origin:top;
   transition:1s;
 }
-.open .envelope:before{transform:rotateX(180deg);}
+.open .envelope:before{
+  transform:rotateX(180deg);
+}
 
 /* Letter */
 .letter{
@@ -107,7 +109,10 @@ h1{
   color:#d6336c;
 }
 
-.typing{margin:15px 0;min-height:50px;}
+.typing{
+  margin:15px 0;
+  min-height:50px;
+}
 
 .photo{
   width:100%;
@@ -117,7 +122,10 @@ h1{
   transform:scale(.8);
   transition:1s ease;
 }
-.photo.show{display:block;transform:scale(1);}
+.photo.show{
+  display:block;
+  transform:scale(1);
+}
 
 .section{
   margin:20px 0;
@@ -125,7 +133,10 @@ h1{
   transform:translateY(30px);
   transition:1s ease;
 }
-.section.visible{opacity:1;transform:translateY(0);}
+.section.visible{
+  opacity:1;
+  transform:translateY(0);
+}
 
 button{
   padding:10px 18px;
@@ -134,8 +145,17 @@ button{
   cursor:pointer;
   margin:5px;
 }
-.yes{background:#ff4d6d;color:white;}
-.no{background:white;color:#ff4d6d;position:absolute;}
+
+.yes{
+  background:#ff4d6d;
+  color:white;
+}
+
+.no{
+  background:white;
+  color:#ff4d6d;
+  position:absolute;
+}
 
 .finalScene{
   display:none;
@@ -143,9 +163,10 @@ button{
   margin-top:150px;
   font-family:'Great Vibes',cursive;
   font-size:3.5rem;
-  color:#ff4d6c;
+  color:#ff4d6d;
   animation:glow 1s infinite alternate;
 }
+
 @keyframes glow{
   from{text-shadow:0 0 10px #ff4d6d;}
   to{text-shadow:0 0 40px #ff85a1;}
@@ -156,6 +177,7 @@ button{
   font-size:22px;
   animation:rise 6s linear infinite;
 }
+
 @keyframes rise{
   0%{transform:translateY(100vh);}
   100%{transform:translateY(-10vh);}
@@ -180,11 +202,12 @@ button{
 <div class="shooting" style="top:20%;left:10%;"></div>
 <div class="shooting" style="top:60%;left:70%;animation-delay:2s;"></div>
 
-<audio id="introMusic" loop>
+<!-- AUDIO FILES -->
+<audio id="introMusic" preload="auto">
   <source src="intro.mp3" type="audio/mpeg">
 </audio>
 
-<audio id="yesMusic" loop>
+<audio id="yesMusic" preload="auto">
   <source src="yes.mp3" type="audio/mpeg">
 </audio>
 
@@ -216,8 +239,8 @@ button{
 
 <script>
 
-/* Scroll fade */
-const observer=new IntersectionObserver(entries=>{
+/* Fade-in sections */
+const observer = new IntersectionObserver(entries=>{
   entries.forEach(entry=>{
     if(entry.isIntersecting){
       entry.target.classList.add("visible");
@@ -226,7 +249,7 @@ const observer=new IntersectionObserver(entries=>{
 });
 document.querySelectorAll(".section").forEach(el=>observer.observe(el));
 
-/* Typing */
+/* Typing effect */
 const text="Rinku... my Yaani 💕";
 let i=0;
 function typeEffect(){
@@ -237,11 +260,19 @@ function typeEffect(){
   }
 }
 
+/* Open Letter */
 function openLetter(){
   document.getElementById("main").classList.add("open");
-  document.getElementById("introMusic").play();
+
+  const intro = document.getElementById("introMusic");
+  intro.currentTime = 0;
+  intro.play().catch(e=>console.log("Intro blocked:",e));
+
   typeEffect();
-  setTimeout(()=>document.getElementById("photo").classList.add("show"),2000);
+
+  setTimeout(()=>{
+    document.getElementById("photo").classList.add("show");
+  },2000);
 }
 
 /* No button escape */
@@ -254,8 +285,14 @@ noBtn.addEventListener("mouseover",()=>{
 /* YES */
 function sayYes(){
 
-  document.getElementById("introMusic").pause();
-  document.getElementById("yesMusic").play();
+  const intro = document.getElementById("introMusic");
+  const yes = document.getElementById("yesMusic");
+
+  intro.pause();
+  intro.currentTime = 0;
+
+  yes.currentTime = 0;
+  yes.play().catch(e=>console.log("Yes blocked:",e));
 
   document.getElementById("main").style.display="none";
   document.getElementById("finalScene").style.display="block";
@@ -296,7 +333,7 @@ function createFireworks(){
   }
 }
 
-/* Secret triple click */
+/* Secret triple tap */
 let tapCount=0;
 document.body.addEventListener("click",()=>{
   tapCount++;
