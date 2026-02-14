@@ -8,37 +8,38 @@
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
+*{margin:0;padding:0;box-sizing:border-box;scroll-behavior:smooth;}
 
 body{
-  height:100vh;
+  min-height:100vh;
   font-family:'Poppins',sans-serif;
-  overflow:hidden;
-  display:flex;
-  justify-content:center;
-  align-items:center;
   background:radial-gradient(circle at top,#1e1e2f,#0f0f1a);
   color:white;
+  overflow-x:hidden;
 }
 
-/* Star background */
-body::before{
-  content:"";
-  position:absolute;
+/* PARALLAX STARS */
+.stars{
+  position:fixed;
   width:200%;
   height:200%;
   background-image:radial-gradient(white 1px,transparent 1px);
   background-size:40px 40px;
   opacity:.15;
-  animation:stars 60s linear infinite;
+  z-index:-1;
+  transition:transform .2s ease-out;
 }
 
-@keyframes stars{
-  from{transform:translate(0,0);}
-  to{transform:translate(-500px,-500px);}
+#main{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:80px 20px;
+  position:relative;
 }
 
-/* Envelope */
+/* Floating envelope animation */
 .envelope{
   position:relative;
   width:320px;
@@ -46,7 +47,12 @@ body::before{
   background:#ff4d6d;
   border-radius:10px;
   cursor:pointer;
-  transition:1s;
+  animation:floatEnvelope 3s ease-in-out infinite;
+}
+
+@keyframes floatEnvelope{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-10px);}
 }
 
 .envelope:before{
@@ -64,30 +70,30 @@ body::before{
   transform:rotateX(180deg);
 }
 
-/* Letter */
+/* LETTER */
 .letter{
   position:absolute;
-  width:90%;
-  max-width:350px;
+  width:95%;
+  max-width:380px;
   background:#fffaf0;
   color:#333;
-  padding:25px;
+  padding:30px;
   border-radius:15px;
-  box-shadow:0 20px 40px rgba(0,0,0,.4);
+  box-shadow:0 20px 50px rgba(0,0,0,.4);
   text-align:center;
-  transform:translateY(150%);
+  transform:translateY(150%) scale(.9);
   opacity:0;
-  transition:1.2s ease;
+  transition:1.3s ease;
 }
 
 .open .letter{
-  transform:translateY(0);
+  transform:translateY(0) scale(1);
   opacity:1;
 }
 
 h1{
   font-family:'Great Vibes',cursive;
-  font-size:2.3rem;
+  font-size:2.4rem;
   color:#d6336c;
   margin-bottom:10px;
 }
@@ -98,17 +104,31 @@ h1{
   margin-bottom:15px;
 }
 
-.message{
-  font-size:.9rem;
-  margin-bottom:15px;
+/* Scroll fade */
+.fade-in{
+  opacity:0;
+  transform:translateY(30px);
+  transition:1s ease;
+}
+
+.fade-in.visible{
+  opacity:1;
+  transform:translateY(0);
 }
 
 /* Photo */
 .photo{
   width:100%;
-  border-radius:10px;
-  margin-bottom:15px;
+  border-radius:12px;
+  margin:15px 0;
   display:none;
+  transform:scale(.8);
+  transition:1s ease;
+}
+
+.photo.show{
+  display:block;
+  transform:scale(1);
 }
 
 /* Buttons */
@@ -140,47 +160,28 @@ button{
   position:absolute;
 }
 
-/* Floating hearts */
+/* Hearts */
 .heart{
   position:absolute;
   font-size:22px;
   animation:float 6s linear infinite;
-  opacity:.8;
 }
 
 @keyframes float{
-  0%{transform:translateY(100vh) scale(1);}
-  100%{transform:translateY(-10vh) scale(1.5);}
-}
-
-/* Confetti */
-.confetti{
-  position:absolute;
-  width:8px;
-  height:8px;
-  background:hsl(calc(360 * var(--i)),100%,60%);
-  top:50%;
-  left:50%;
-  animation:confetti 2s ease-out forwards;
-}
-
-@keyframes confetti{
-  to{
-    transform:translate(calc(200px - 400px * random()), calc(200px - 400px * random()));
-    opacity:0;
-  }
+  0%{transform:translateY(100vh);}
+  100%{transform:translateY(-10vh);}
 }
 
 .celebrate{
   font-family:'Great Vibes',cursive;
-  font-size:2.8rem;
+  font-size:3rem;
   color:#ff4d6d;
   animation:glow 1s infinite alternate;
 }
 
 @keyframes glow{
   from{text-shadow:0 0 10px #ff4d6d;}
-  to{text-shadow:0 0 25px #ff85a1;}
+  to{text-shadow:0 0 30px #ff85a1;}
 }
 
 @media(max-width:480px){
@@ -191,26 +192,28 @@ button{
 
 <body>
 
+<div class="stars" id="stars"></div>
+
 <audio id="music" loop>
-  <!-- Replace with your own mp3 file -->
   <source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <div id="main">
   <div class="envelope" onclick="openLetter()"></div>
-  <div class="letter">
-      <h1>My Dearest 💌</h1>
 
+  <div class="letter fade-in" id="letter">
+      <h1>My Dearest 💌</h1>
       <div class="typing" id="typingText"></div>
 
-      <!-- Add your image file name here -->
       <img src="yourphoto.jpg" class="photo" id="photo">
 
-      <div class="message">
+      <div class="fade-in">
           From the moment you came into my life,  
           everything feels magical and complete.  
-          Will you be my Valentine? ❤️
+          You are my happiness, my peace, my favorite person.  
       </div>
+
+      <br>
 
       <button class="yes" onclick="sayYes()">Yes Yaani 💖</button>
       <button class="no" id="noBtn">No 🙈</button>
@@ -218,14 +221,35 @@ button{
 </div>
 
 <script>
+/* Parallax stars */
+window.addEventListener("scroll",()=>{
+  document.getElementById("stars").style.transform=
+    "translateY("+window.scrollY*0.3+"px)";
+});
+
+/* Fade-in on scroll */
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add("visible");
+    }
+  });
+});
+document.querySelectorAll(".fade-in").forEach(el=>{
+  observer.observe(el);
+});
+
+/* Open letter */
 function openLetter(){
   document.getElementById("main").classList.add("open");
   document.getElementById("music").play();
   typeEffect();
-  setTimeout(()=>{document.getElementById("photo").style.display="block";},2000);
+  setTimeout(()=>{
+    document.getElementById("photo").classList.add("show");
+  },2000);
 }
 
-/* Typing effect */
+/* Typing */
 const text="Rinku... my Yaani 💕";
 let i=0;
 function typeEffect(){
@@ -236,21 +260,20 @@ function typeEffect(){
   }
 }
 
-/* No button escapes */
+/* No button escape */
 const noBtn=document.getElementById("noBtn");
 noBtn.addEventListener("mouseover",()=>{
   noBtn.style.left=Math.random()*250+"px";
   noBtn.style.top=Math.random()*150+"px";
 });
 
-/* Yes celebration */
+/* YES effects */
 function sayYes(){
   document.body.innerHTML=`<div class="celebrate">She Said YES!!! 💕</div>`;
   createHearts(60);
   createConfetti(80);
   createFireworks();
 }
-
 
 /* Hearts */
 function createHearts(n){
@@ -267,38 +290,42 @@ function createHearts(n){
 /* Confetti */
 function createConfetti(n){
   for(let i=0;i<n;i++){
-    const conf=document.createElement("div");
-    conf.classList.add("confetti");
-    conf.style.setProperty('--i',Math.random());
-    conf.style.left=Math.random()*100+"vw";
-    conf.style.top=Math.random()*100+"vh";
-    document.body.appendChild(conf);
+    let c=document.createElement("div");
+    c.style.position="absolute";
+    c.style.width="8px";
+    c.style.height="8px";
+    c.style.background=`hsl(${Math.random()*360},100%,60%)`;
+    c.style.left=Math.random()*100+"vw";
+    c.style.top=Math.random()*100+"vh";
+    c.style.opacity="1";
+    c.style.transition="1s";
+    document.body.appendChild(c);
+    setTimeout(()=>{
+      c.style.transform=`translate(${Math.random()*400-200}px,${Math.random()*400-200}px)`;
+      c.style.opacity="0";
+    },10);
   }
 }
 
 /* Fireworks */
-function createFireworks() {
-  for (let i = 0; i < 25; i++) {
-    let fire = document.createElement("div");
-    fire.style.position = "absolute";
-    fire.style.width = "6px";
-    fire.style.height = "6px";
-    fire.style.borderRadius = "50%";
-    fire.style.background = `hsl(${Math.random()*360},100%,60%)`;
-    fire.style.left = "50%";
-    fire.style.top = "50%";
-    fire.style.transition = "1s ease-out";
-    document.body.appendChild(fire);
-
+function createFireworks(){
+  for(let i=0;i<30;i++){
+    let f=document.createElement("div");
+    f.style.position="absolute";
+    f.style.width="6px";
+    f.style.height="6px";
+    f.style.borderRadius="50%";
+    f.style.background=`hsl(${Math.random()*360},100%,60%)`;
+    f.style.left="50%";
+    f.style.top="50%";
+    f.style.transition="1s ease-out";
+    document.body.appendChild(f);
     setTimeout(()=>{
-      fire.style.transform = `translate(${Math.random()*400-200}px, ${Math.random()*400-200}px)`;
-      fire.style.opacity = "0";
+      f.style.transform=`translate(${Math.random()*500-250}px,${Math.random()*500-250}px)`;
+      f.style.opacity="0";
     },10);
-
-    setTimeout(()=> fire.remove(),1000);
   }
 }
-
 </script>
 
 </body>
