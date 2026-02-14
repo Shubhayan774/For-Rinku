@@ -8,39 +8,45 @@
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  scroll-behavior:smooth;
-}
-
-html, body{
-  height:auto;
-}
-
+*{margin:0;padding:0;box-sizing:border-box;scroll-behavior:smooth;}
 body{
   font-family:'Poppins',sans-serif;
-  background:radial-gradient(circle at top,#1e1e2f,#0f0f1a);
+  background:radial-gradient(circle at top,#141428,#000);
   color:white;
   overflow-x:hidden;
+  animation:bgGlow 6s infinite alternate;
 }
 
-/* Stars background */
+@keyframes bgGlow{
+  from{background:radial-gradient(circle at top,#141428,#000);}
+  to{background:radial-gradient(circle at top,#1f1f3a,#000);}
+}
+
+/* Stars */
 .stars{
   position:fixed;
-  top:0;
-  left:0;
   width:200%;
   height:200%;
   background-image:radial-gradient(white 1px,transparent 1px);
   background-size:40px 40px;
   opacity:.15;
   z-index:-1;
-  transition:transform .2s ease-out;
 }
 
-/* Main wrapper */
+/* Shooting stars */
+.shooting{
+  position:absolute;
+  width:2px;
+  height:80px;
+  background:linear-gradient(white,transparent);
+  animation:shoot 5s linear infinite;
+  opacity:.6;
+}
+@keyframes shoot{
+  0%{transform:translate(-200px,-200px) rotate(45deg);}
+  100%{transform:translate(1200px,800px) rotate(45deg);}
+}
+
 #main{
   width:100%;
   padding:120px 20px;
@@ -51,20 +57,17 @@ body{
 
 /* Envelope */
 .envelope{
-  position:relative;
   width:320px;
   height:200px;
   background:#ff4d6d;
   border-radius:10px;
   cursor:pointer;
-  animation:floatEnvelope 3s ease-in-out infinite;
+  animation:float 3s ease-in-out infinite;
 }
-
-@keyframes floatEnvelope{
+@keyframes float{
   0%,100%{transform:translateY(0);}
   50%{transform:translateY(-10px);}
 }
-
 .envelope:before{
   content:"";
   position:absolute;
@@ -75,10 +78,7 @@ body{
   transform-origin:top;
   transition:1s;
 }
-
-.open .envelope:before{
-  transform:rotateX(180deg);
-}
+.open .envelope:before{transform:rotateX(180deg);}
 
 /* Letter */
 .letter{
@@ -89,13 +89,11 @@ body{
   color:#333;
   padding:30px;
   border-radius:15px;
-  box-shadow:0 20px 50px rgba(0,0,0,.4);
   text-align:center;
   transform:translateY(150%) scale(.9);
   opacity:0;
   transition:1.3s ease;
 }
-
 .open .letter{
   transform:translateY(0) scale(1);
   opacity:1;
@@ -103,30 +101,12 @@ body{
 
 h1{
   font-family:'Great Vibes',cursive;
-  font-size:2.4rem;
+  font-size:2.5rem;
   color:#d6336c;
-  margin-bottom:10px;
 }
 
-.typing{
-  min-height:50px;
-  font-size:1.1rem;
-  margin-bottom:15px;
-}
+.typing{margin:15px 0;min-height:50px;}
 
-.section{
-  margin:20px 0;
-  opacity:0;
-  transform:translateY(30px);
-  transition:1s ease;
-}
-
-.section.visible{
-  opacity:1;
-  transform:translateY(0);
-}
-
-/* Photo */
 .photo{
   width:100%;
   border-radius:12px;
@@ -135,135 +115,101 @@ h1{
   transform:scale(.8);
   transition:1s ease;
 }
+.photo.show{display:block;transform:scale(1);}
 
-.photo.show{
-  display:block;
-  transform:scale(1);
+.section{
+  margin:20px 0;
+  opacity:0;
+  transform:translateY(30px);
+  transition:1s ease;
 }
+.section.visible{opacity:1;transform:translateY(0);}
 
-/* Buttons */
 button{
   padding:10px 18px;
   border:none;
   border-radius:25px;
   cursor:pointer;
   margin:5px;
-  font-size:.9rem;
-  transition:.3s;
 }
+.yes{background:#ff4d6d;color:white;}
+.no{background:white;color:#ff4d6d;position:absolute;}
 
-.yes{
-  background:#ff4d6d;
-  color:white;
-  animation:pulse 1.5s infinite;
-}
-
-@keyframes pulse{
-  0%{box-shadow:0 0 0 0 rgba(255,77,109,.7);}
-  70%{box-shadow:0 0 0 15px rgba(255,77,109,0);}
-  100%{box-shadow:0 0 0 0 rgba(255,77,109,0);}
-}
-
-.no{
-  background:white;
-  color:#ff4d6d;
-  position:absolute;
-}
-
-/* Celebration */
-.celebrate{
+.final{
   margin-top:150px;
   text-align:center;
   font-family:'Great Vibes',cursive;
-  font-size:3rem;
+  font-size:3.5rem;
   color:#ff4d6d;
   animation:glow 1s infinite alternate;
 }
-
 @keyframes glow{
   from{text-shadow:0 0 10px #ff4d6d;}
-  to{text-shadow:0 0 30px #ff85a1;}
+  to{text-shadow:0 0 40px #ff85a1;}
 }
 
 .heart{
   position:absolute;
   font-size:22px;
-  animation:float 6s linear infinite;
+  animation:rise 6s linear infinite;
 }
-
-@keyframes float{
+@keyframes rise{
   0%{transform:translateY(100vh);}
   100%{transform:translateY(-10vh);}
 }
 
-@media(max-width:480px){
-  .envelope{width:260px;}
+.secret{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:white;
+  color:#d6336c;
+  padding:10px 15px;
+  border-radius:20px;
+  display:none;
 }
 </style>
 </head>
 
 <body>
 
-<div class="stars" id="stars"></div>
+<div class="stars"></div>
+<div class="shooting" style="top:20%;left:10%;"></div>
+<div class="shooting" style="top:50%;left:60%;animation-delay:2s;"></div>
 
-<audio id="music" loop>
+<audio id="bgMusic" loop>
   <source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <div id="main">
-
   <div class="envelope" onclick="openLetter()"></div>
 
   <div class="letter" id="letter">
+    <h1>My Dearest 💌</h1>
+    <div class="typing" id="typingText"></div>
 
-      <h1>My Dearest 💌</h1>
-      <div class="typing" id="typingText"></div>
+    <img src="yourphoto.jpg" class="photo" id="photo">
 
-      <img src="yourphoto.jpg" class="photo" id="photo">
+    <div class="section">You are my happiness.</div>
+    <div class="section">You are my peace.</div>
+    <div class="section">You are my forever.</div>
 
-      <div class="section">
-        From the moment you came into my life,  
-        everything feels magical and complete.
-      </div>
-
-      <div class="section">
-        You are my happiness, my peace, my favorite person.
-      </div>
-
-      <button class="yes" onclick="sayYes()">Yes Yaani 💖</button>
-      <button class="no" id="noBtn">No 🙈</button>
-
+    <button class="yes" onclick="sayYes()">Yes Yaani 💖</button>
+    <button class="no" id="noBtn">No 🙈</button>
   </div>
 </div>
 
-<script>
-/* Parallax stars */
-window.addEventListener("scroll",()=>{
-  document.getElementById("stars").style.transform =
-    "translateY("+window.scrollY*0.3+"px)";
-});
+<div class="secret" id="secretBox">I love you more than words can say 💌</div>
 
-/* Fade in sections */
+<script>
+
+/* Scroll fade */
 const observer=new IntersectionObserver(entries=>{
   entries.forEach(entry=>{
-    if(entry.isIntersecting){
-      entry.target.classList.add("visible");
-    }
+    if(entry.isIntersecting){entry.target.classList.add("visible");}
   });
 });
-document.querySelectorAll(".section").forEach(el=>{
-  observer.observe(el);
-});
-
-/* Open letter */
-function openLetter(){
-  document.getElementById("main").classList.add("open");
-  document.getElementById("music").play();
-  typeEffect();
-  setTimeout(()=>{
-    document.getElementById("photo").classList.add("show");
-  },2000);
-}
+document.querySelectorAll(".section").forEach(el=>observer.observe(el));
 
 /* Typing */
 const text="Rinku... my Yaani 💕";
@@ -276,6 +222,12 @@ function typeEffect(){
   }
 }
 
+function openLetter(){
+  document.getElementById("main").classList.add("open");
+  typeEffect();
+  setTimeout(()=>document.getElementById("photo").classList.add("show"),2000);
+}
+
 /* No button escape */
 const noBtn=document.getElementById("noBtn");
 noBtn.addEventListener("mouseover",()=>{
@@ -283,13 +235,15 @@ noBtn.addEventListener("mouseover",()=>{
   noBtn.style.top=Math.random()*150+"px";
 });
 
-/* YES celebration */
+/* YES */
 function sayYes(){
-  document.body.innerHTML=`<div class="celebrate">She Said YES!!! 💕</div>`;
-  createHearts(60);
+  document.body.innerHTML=`<div class="final">I Love You Yaani ❤️</div>`;
+  document.getElementById("bgMusic").play();
+  createHearts(80);
   createFireworks();
 }
 
+/* Hearts */
 function createHearts(n){
   for(let i=0;i<n;i++){
     const heart=document.createElement("div");
@@ -301,8 +255,9 @@ function createHearts(n){
   }
 }
 
+/* Fireworks */
 function createFireworks(){
-  for(let i=0;i<30;i++){
+  for(let i=0;i<40;i++){
     let f=document.createElement("div");
     f.style.position="absolute";
     f.style.width="6px";
@@ -319,6 +274,15 @@ function createFireworks(){
     },10);
   }
 }
+
+/* Secret tap */
+let tapCount=0;
+document.body.addEventListener("click",()=>{
+  tapCount++;
+  if(tapCount===3){
+    document.getElementById("secretBox").style.display="block";
+  }
+});
 </script>
 
 </body>
