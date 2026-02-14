@@ -8,19 +8,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;scroll-behavior:smooth;}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  scroll-behavior:smooth;
+}
+
+html, body{
+  height:auto;
+}
 
 body{
-  min-height:100vh;
   font-family:'Poppins',sans-serif;
   background:radial-gradient(circle at top,#1e1e2f,#0f0f1a);
   color:white;
   overflow-x:hidden;
 }
 
-/* PARALLAX STARS */
+/* Stars background */
 .stars{
   position:fixed;
+  top:0;
+  left:0;
   width:200%;
   height:200%;
   background-image:radial-gradient(white 1px,transparent 1px);
@@ -30,16 +40,16 @@ body{
   transition:transform .2s ease-out;
 }
 
+/* Main wrapper */
 #main{
-  min-height:100vh;
+  width:100%;
+  padding:120px 20px;
   display:flex;
   justify-content:center;
-  align-items:center;
-  padding:80px 20px;
   position:relative;
 }
 
-/* Floating envelope animation */
+/* Envelope */
 .envelope{
   position:relative;
   width:320px;
@@ -70,7 +80,7 @@ body{
   transform:rotateX(180deg);
 }
 
-/* LETTER */
+/* Letter */
 .letter{
   position:absolute;
   width:95%;
@@ -104,14 +114,14 @@ h1{
   margin-bottom:15px;
 }
 
-/* Scroll fade */
-.fade-in{
+.section{
+  margin:20px 0;
   opacity:0;
   transform:translateY(30px);
   transition:1s ease;
 }
 
-.fade-in.visible{
+.section.visible{
   opacity:1;
   transform:translateY(0);
 }
@@ -160,19 +170,10 @@ button{
   position:absolute;
 }
 
-/* Hearts */
-.heart{
-  position:absolute;
-  font-size:22px;
-  animation:float 6s linear infinite;
-}
-
-@keyframes float{
-  0%{transform:translateY(100vh);}
-  100%{transform:translateY(-10vh);}
-}
-
+/* Celebration */
 .celebrate{
+  margin-top:150px;
+  text-align:center;
   font-family:'Great Vibes',cursive;
   font-size:3rem;
   color:#ff4d6d;
@@ -182,6 +183,17 @@ button{
 @keyframes glow{
   from{text-shadow:0 0 10px #ff4d6d;}
   to{text-shadow:0 0 30px #ff85a1;}
+}
+
+.heart{
+  position:absolute;
+  font-size:22px;
+  animation:float 6s linear infinite;
+}
+
+@keyframes float{
+  0%{transform:translateY(100vh);}
+  100%{transform:translateY(-10vh);}
 }
 
 @media(max-width:480px){
@@ -199,35 +211,39 @@ button{
 </audio>
 
 <div id="main">
+
   <div class="envelope" onclick="openLetter()"></div>
 
-  <div class="letter fade-in" id="letter">
+  <div class="letter" id="letter">
+
       <h1>My Dearest 💌</h1>
       <div class="typing" id="typingText"></div>
 
       <img src="yourphoto.jpg" class="photo" id="photo">
 
-      <div class="fade-in">
-          From the moment you came into my life,  
-          everything feels magical and complete.  
-          You are my happiness, my peace, my favorite person.  
+      <div class="section">
+        From the moment you came into my life,  
+        everything feels magical and complete.
       </div>
 
-      <br>
+      <div class="section">
+        You are my happiness, my peace, my favorite person.
+      </div>
 
       <button class="yes" onclick="sayYes()">Yes Yaani 💖</button>
       <button class="no" id="noBtn">No 🙈</button>
+
   </div>
 </div>
 
 <script>
 /* Parallax stars */
 window.addEventListener("scroll",()=>{
-  document.getElementById("stars").style.transform=
+  document.getElementById("stars").style.transform =
     "translateY("+window.scrollY*0.3+"px)";
 });
 
-/* Fade-in on scroll */
+/* Fade in sections */
 const observer=new IntersectionObserver(entries=>{
   entries.forEach(entry=>{
     if(entry.isIntersecting){
@@ -235,7 +251,7 @@ const observer=new IntersectionObserver(entries=>{
     }
   });
 });
-document.querySelectorAll(".fade-in").forEach(el=>{
+document.querySelectorAll(".section").forEach(el=>{
   observer.observe(el);
 });
 
@@ -267,15 +283,13 @@ noBtn.addEventListener("mouseover",()=>{
   noBtn.style.top=Math.random()*150+"px";
 });
 
-/* YES effects */
+/* YES celebration */
 function sayYes(){
   document.body.innerHTML=`<div class="celebrate">She Said YES!!! 💕</div>`;
   createHearts(60);
-  createConfetti(80);
   createFireworks();
 }
 
-/* Hearts */
 function createHearts(n){
   for(let i=0;i<n;i++){
     const heart=document.createElement("div");
@@ -287,27 +301,6 @@ function createHearts(n){
   }
 }
 
-/* Confetti */
-function createConfetti(n){
-  for(let i=0;i<n;i++){
-    let c=document.createElement("div");
-    c.style.position="absolute";
-    c.style.width="8px";
-    c.style.height="8px";
-    c.style.background=`hsl(${Math.random()*360},100%,60%)`;
-    c.style.left=Math.random()*100+"vw";
-    c.style.top=Math.random()*100+"vh";
-    c.style.opacity="1";
-    c.style.transition="1s";
-    document.body.appendChild(c);
-    setTimeout(()=>{
-      c.style.transform=`translate(${Math.random()*400-200}px,${Math.random()*400-200}px)`;
-      c.style.opacity="0";
-    },10);
-  }
-}
-
-/* Fireworks */
 function createFireworks(){
   for(let i=0;i<30;i++){
     let f=document.createElement("div");
