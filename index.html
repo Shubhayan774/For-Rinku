@@ -9,6 +9,7 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;scroll-behavior:smooth;}
+
 body{
   font-family:'Poppins',sans-serif;
   background:radial-gradient(circle at top,#141428,#000);
@@ -39,7 +40,7 @@ body{
   width:2px;
   height:80px;
   background:linear-gradient(white,transparent);
-  animation:shoot 5s linear infinite;
+  animation:shoot 6s linear infinite;
   opacity:.6;
 }
 @keyframes shoot{
@@ -63,6 +64,7 @@ body{
   border-radius:10px;
   cursor:pointer;
   animation:float 3s ease-in-out infinite;
+  position:relative;
 }
 @keyframes float{
   0%,100%{transform:translateY(0);}
@@ -135,12 +137,13 @@ button{
 .yes{background:#ff4d6d;color:white;}
 .no{background:white;color:#ff4d6d;position:absolute;}
 
-.final{
-  margin-top:150px;
+.finalScene{
+  display:none;
   text-align:center;
+  margin-top:150px;
   font-family:'Great Vibes',cursive;
   font-size:3.5rem;
-  color:#ff4d6d;
+  color:#ff4d6c;
   animation:glow 1s infinite alternate;
 }
 @keyframes glow{
@@ -175,10 +178,14 @@ button{
 
 <div class="stars"></div>
 <div class="shooting" style="top:20%;left:10%;"></div>
-<div class="shooting" style="top:50%;left:60%;animation-delay:2s;"></div>
+<div class="shooting" style="top:60%;left:70%;animation-delay:2s;"></div>
 
-<audio id="bgMusic" loop>
-  <source src="music.mp3" type="audio/mpeg">
+<audio id="introMusic" loop>
+  <source src="intro.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="yesMusic" loop>
+  <source src="yes.mp3" type="audio/mpeg">
 </audio>
 
 <div id="main">
@@ -199,14 +206,22 @@ button{
   </div>
 </div>
 
-<div class="secret" id="secretBox">I love you more than words can say 💌</div>
+<div class="finalScene" id="finalScene">
+  I Love You Yaani ❤️
+</div>
+
+<div class="secret" id="secretBox">
+  I love you more than words can say 💌
+</div>
 
 <script>
 
 /* Scroll fade */
 const observer=new IntersectionObserver(entries=>{
   entries.forEach(entry=>{
-    if(entry.isIntersecting){entry.target.classList.add("visible");}
+    if(entry.isIntersecting){
+      entry.target.classList.add("visible");
+    }
   });
 });
 document.querySelectorAll(".section").forEach(el=>observer.observe(el));
@@ -224,6 +239,7 @@ function typeEffect(){
 
 function openLetter(){
   document.getElementById("main").classList.add("open");
+  document.getElementById("introMusic").play();
   typeEffect();
   setTimeout(()=>document.getElementById("photo").classList.add("show"),2000);
 }
@@ -237,8 +253,13 @@ noBtn.addEventListener("mouseover",()=>{
 
 /* YES */
 function sayYes(){
-  document.body.innerHTML=`<div class="final">I Love You Yaani ❤️</div>`;
-  document.getElementById("bgMusic").play();
+
+  document.getElementById("introMusic").pause();
+  document.getElementById("yesMusic").play();
+
+  document.getElementById("main").style.display="none";
+  document.getElementById("finalScene").style.display="block";
+
   createHearts(80);
   createFireworks();
 }
@@ -275,7 +296,7 @@ function createFireworks(){
   }
 }
 
-/* Secret tap */
+/* Secret triple click */
 let tapCount=0;
 document.body.addEventListener("click",()=>{
   tapCount++;
